@@ -1,0 +1,55 @@
+{% extends 'base.html' %} {% load static %}
+<!-- prettier-ignore -->
+{% block title %}Home{% endblock title %}
+{% block css %}
+<link rel="stylesheet" href=" {% static 'blog/blog.css' %} " />
+{% endblock css %}
+<!-- prettier-ignore -->
+{% block body_content %}
+<header id="main-navigation">
+	<h1><a href="">Hari's Blog 🧝🏽‍♂️</a></h1>
+	<nav>
+		<a href="">All Posts</a>
+	</nav>
+</header>
+<section id="welcome">
+	<header>
+		<img src="" alt="Hariprasad - Author" />
+		<h2>Hariprasad's Blog</h2>
+	</header>
+	<p>Hi, I am Hariprasad and I love to build web apps</p>
+</section>
+
+<section id="latest-posts">
+	<h2>Recent Posts</h2>
+	<ul>
+		<li>
+			<article class="post">
+				<a href="">
+					<img src="" alt="Mountains" />
+					<div class="post__content">
+						<h3>Mountains</h3>
+						<p>
+							Lorem ipsum dolor sit amet consectetur adipisicing
+							elit. Inventore dicta illum repudiandae officia fuga
+							repellat.
+						</p>
+					</div>
+				</a>
+			</article>
+		</li>
+	</ul>
+</section>
+
+<section id="about">
+	<h2>What I Do</h2>
+	<p>
+		I love programming, I love to help others and I enjoy exploring new
+		technologies in general!
+	</p>
+	<p>
+		My goal is to keep on growing as a developer - and if I could help you
+		do the same, I'd be very happy 😇
+	</p>
+</section>
+{% endblock body_content %}

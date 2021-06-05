@@ -1,0 +1,40 @@
+{% extends 'base.html' %} {% load static %}
+<!-- prettier-ignore -->
+{% block title %}Page Details{% endblock title %}
+
+{% block css %}
+<link rel="stylesheet" href=" {% static 'blog/post_details.css' %} " />
+{% endblock css %}
+
+<!-- prettier-ignore -->
+{% block body_content %}
+<section id="summary">
+	<h2>Post Title</h2>
+	<article>
+		<img
+			src=" {% static 'blog/images/mountains.jpg' %} "
+			alt="Post Image"
+		/>
+		<address>By Hariprasad</address>
+		<div>Last updated on <time>5th June</time></div>
+	</article>
+</section>
+
+<main>
+	<p>
+		Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum quos
+		maxime sed aperiam! Praesentium facilis, earum optio officia modi
+		aliquam non dignissimos suscipit dicta corporis.
+	</p>
+	<p>
+		Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum quos
+		maxime sed aperiam! Praesentium facilis, earum optio officia modi
+		aliquam non dignissimos suscipit dicta corporis.
+	</p>
+	<p>
+		Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum quos
+		maxime sed aperiam! Praesentium facilis, earum optio officia modi
+		aliquam non dignissimos suscipit dicta corporis.
+	</p>
+</main>
+{% endblock body_content %}

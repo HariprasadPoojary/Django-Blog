@@ -42,6 +42,13 @@
 	box-shadow: 1px 1px 12px rgba(0, 0, 0, 0.4);
 }
 
+/*! For now */
+.post img {
+	width: 30rem;
+	height: 20rem;
+	margin: 0 auto;
+}
+
 #latest-posts h2 {
 	text-align: center;
 }

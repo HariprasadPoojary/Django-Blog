@@ -8,7 +8,7 @@ def landing_page(request):
 
 def posts(request):
     context = {}
-    return render(request, "blog/posts.html", context)
+    return render(request, "blog/all_posts.html", context)
 
 
 def post_details(request, post_slug):

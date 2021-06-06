@@ -21,7 +21,10 @@
 <section id="latest-posts">
 	<h2>Recent Posts</h2>
 	<ul>
-		{% include "blog/includes/post.html" %}
+		<!-- prettier-ignore -->
+		{% for post in posts %} 
+			{% include "blog/includes/post.html" %} 
+		{% endfor %}
 	</ul>
 </section>
 

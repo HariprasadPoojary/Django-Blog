@@ -13,11 +13,9 @@
 	<h2>All Posts</h2>
 	<ul>
 		<!-- prettier-ignore -->
-		{% include "blog/includes/post.html" %}
-		{% include "blog/includes/post.html" %}
-		{% include "blog/includes/post.html" %}
-		{% include "blog/includes/post.html" %}
-		{% include "blog/includes/post.html" %}
+		{% for post in posts %}
+			{% include "blog/includes/post.html" %}
+		{% endfor %}
 	</ul>
 </section>
 {% endblock body_content %}

@@ -1,8 +1,5 @@
 from django.db import models
 
-# for _ in class book_rating due to error --> NameError: name '_' is not defined
-from django.utils.translation import gettext as _
-
 # Create your models here.
 class Book(models.Model):
     BOOK_RATING = [
@@ -23,7 +20,7 @@ class Book(models.Model):
         return f"{self.title}, rating - {self.rating}"
 
 
-# ! Queries practiced usign Django shell
+# ! Queries practiced using Django shell
 
 # ? >>> from book_outlet.models import Book
 # >>> django = Book(title="Django Unchained", rating=4)

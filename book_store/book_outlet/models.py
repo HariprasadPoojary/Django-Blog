@@ -23,40 +23,61 @@ class Book(models.Model):
         return f"{self.title}, rating - {self.rating}"
 
 
-# Queries practiced usign Django shell
+# ! Queries practiced usign Django shell
 
-# >>> from book_outlet.models import Book
+# ? >>> from book_outlet.models import Book
 # >>> django = Book(title="Django Unchained", rating=4)
 # >>> django.save()
 # >>> mehula = Book(title="Immortals of Mehula", rating=4)
 # >>> mehula.save()
-# >>> Book.objects.all()
+# * >>> Book.objects.all()
 # <QuerySet [<Book: Book object (1)>, <Book: Book object (2)>]>
-# >>> Book.objects.all()
+# * >>> Book.objects.all()
 # <QuerySet [<Book: Book object (1)>, <Book: Book object (2)>]>
 
-# * Create and Save at the same time
-# >>> Book.objects.create(title="50 Shades of Grey", author="E. L. James", rating=5, pages=250)
+# ! Create and Save at the same time
+# * >>> Book.objects.create(title="50 Shades of Grey", author="E. L. James", rating=5, pages=250)
 # <Book: 50 Shades of Grey, rating - 5>
-# >>> Book.objects.create(title="50 Shades Darker", author="E. L. James", rating=5, pages=300)
+# * >>> Book.objects.create(title="50 Shades Darker", author="E. L. James", rating=5, pages=300)
 # <Book: 50 Shades Darker, rating - 5>
-# >>> Book.objects.create(title="50 Shades Creed", author="E. L. James", rating=5, pages=280)
+# * >>> Book.objects.create(title="50 Shades Creed", author="E. L. James", rating=5, pages=280)
 # <Book: 50 Shades Creed, rating - 5>
-# >>> Book.objects.create(title="Da Vinci Code", author="Dan Brown", rating=4, pages=450)
+# * >>> Book.objects.create(title="Da Vinci Code", author="Dan Brown", rating=4, pages=450)
 # <Book: Da Vinci Code, rating - 4>
-# >>> Book.objects.create(title="Angels & Demons", author="Dan Brown", rating=4, pages=550)
+# * >>> Book.objects.create(title="Angels & Demons", author="Dan Brown", rating=4, pages=550)
 # <Book: Angels & Demons, rating - 4>
 
-# * get must return only 1 object else MultipleObjectsReturned Exception
+# ! get must return only 1 object else MultipleObjectsReturned Exception
 # Book.objects.get(id=2)
 # <Book: Immortals of Mehula, rating - 4>
 
-# * Use of filter to get multiple objects in return
-# >>> Book.objects.filter(author="E. L. James")
+# ! Use of filter to get multiple objects in return
+# * >>> Book.objects.filter(author="E. L. James")
 # <QuerySet [<Book: 50 Shades of Grey, rating - 5>, <Book: 50 Shades Darker, rating - 5>, <Book: 50 Shades Creed, rating - 5>]>
-# >>> Book.objects.filter(author="E. L. James", pages=300)
+# * >>> Book.objects.filter(author="E. L. James", pages=300)
 # <QuerySet [<Book: 50 Shades Darker, rating - 5>]>
-# >>> Book.objects.filter(author="E. L. James", pages__gt=200)
+# * >>> Book.objects.filter(author="E. L. James", pages__gt=200)
 # <QuerySet [<Book: 50 Shades of Grey, rating - 5>, <Book: 50 Shades Darker, rating - 5>, <Book: 50 Shades Creed, rating - 5>]>
-# >>> Book.objects.filter(author="E. L. James", pages__gt=280)
+# * >>> Book.objects.filter(author="E. L. James", pages__gt=280)
+# <QuerySet [<Book: 50 Shades Darker, rating - 5>]>
+
+# ! Quering objects with OR condition, by default normal filters act like AND condition
+# ? >>> from django.db.models import Q
+# * >>> Book.objects.filter(Q(author="E. L. James") | Q(pages__gt=280))
+# <QuerySet [<Book: Django Unchained, rating - 4>, <Book: Immortals of Mehula, rating - 4>, <Book: 50 Shades of Grey, rating - 5>, <Book: 50 Shades Darker, rating - 5>, <Book: 50 Shades Creed, rating - 5>, <Book: Da Vinci Code, rating - 4>, <Book: Angels & Demons, rating - 4>]>
+# * >>> Book.objects.filter(Q(author="E. L. James") | Q(author="Dan Brown"))
+# <QuerySet [<Book: 50 Shades of Grey, rating - 5>, <Book: 50 Shades Darker, rating - 5>, <Book: 50 Shades Creed, rating - 5>, <Book: Da Vinci Code, rating - 4>, <Book: Angels & Demons, rating - 4>]>
+
+# ! Quering objects with OR & AND condition, by default normal filters act like AND condition
+# * >>> Book.objects.filter(Q(author="E. L. James") | Q(author="Dan Brown"), pages__gt=280)
+# <QuerySet [<Book: 50 Shades Darker, rating - 5>, <Book: Da Vinci Code, rating - 4>, <Book: Angels & Demons, rating - 4>]>
+
+# ! We can cache the results in Django to increase performance by reducing the database hit
+# * >>> james_brown = Book.objects.filter(Q(author="E. L. James") | Q(author="Dan Brown"))
+# * >>> james_brown.filter(pages__gt=280)
+# <QuerySet [<Book: 50 Shades Darker, rating - 5>, <Book: Da Vinci Code, rating - 4>, <Book: Angels & Demons, rating - 4>]>
+# * >>> james_brown.filter(rating__gt=4)
+# <QuerySet [<Book: 50 Shades of Grey, rating - 5>, <Book: 50 Shades Darker, rating - 5>, <Book: 50 Shades Creed, rating - 5>]>
+# * >>> james_brown_page = james_brown.filter(pages__gt=280)
+# * >>> james_brown_page.filter(author="E. L. James")
 # <QuerySet [<Book: 50 Shades Darker, rating - 5>]>

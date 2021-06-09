@@ -1,13 +1,21 @@
 {% extends 'base.html' %}
 <!-- prettier-ignore -->
+{% block title %}{{book.title}}{% endblock title %}
+
 {% block body_content %}
 
-<h2>Details of Book {{book.title}}</h2>
-<ul>
-	<li>Author: {{book.author}}</li>
-	<li>Rating: {{book.rating}}</li>
-	<li>pages: {{book.rating}}</li>
-	<li>Is Best Selling? {{book.is_bestselling}}</li>
-</ul>
+<h1>Details of Book {{book.title}}</h1>
+
+<h3>Author: {{book.author}}</h3>
+<p>The Book has a Rating of {{book.rating}} stars</p>
+<p>
+	with {{book.pages}} pages and is
+	<!-- prettier-ignore -->
+	{% if book.is_bestselling %} 
+        a Best Seller
+	{% else %} 
+        not a Best Seller 
+    {% endif %}
+</p>
 
 {% endblock body_content %}

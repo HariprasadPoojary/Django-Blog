@@ -1,12 +1,14 @@
 {% extends 'base.html' %}
 <!-- prettier-ignore -->
+{% block title %}Book Store{% endblock title %}
 {% block body_content %}
 <ul>
 	{% for book in all_books %}
 	<li>
-		<a href=" {% url 'book_detail' book_title=book.title|slugify %} "
+		<!-- <a href=" {% url 'book_detail' book_title=book.title|slugify %} "
 			>{{book.title}}</a
-		>
+		> -->
+		<a href=" {{book.get_absolute_url}} ">{{book.title}}</a>
 	</li>
 	{% endfor %}
 </ul>

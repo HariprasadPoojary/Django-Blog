@@ -17,7 +17,9 @@ class Book(models.Model):
     author = models.CharField(max_length=50, null=True)
     rating = models.IntegerField(choices=BOOK_RATING)
     is_bestselling = models.BooleanField(default=False)
-    slug = models.SlugField(default="", null=False, db_index=True) #db_index is used to increase the performance by storing the data more efficiently
+    slug = models.SlugField(
+        default="", null=False, db_index=True
+    )  # db_index is used to increase the performance by storing the data more efficiently
 
     # define a function to return url from model itself
     def get_absolute_url(self):
@@ -29,12 +31,13 @@ class Book(models.Model):
 
         return reverse("book_detail", args=[slug_text])
 
-    # Override Django's save method to populate slug field
-    def save(self, *args, **kwargs):
-        self.slug = slugify(self.title)
+    # *Override Django's save method to populate slug field
+    # def save(self, *args, **kwargs):
+    #     self.slug = slugify(self.title)
 
-        # !IMP call super class' save method to make sure other operations work as expected
-        super().save(*args, **kwargs)
+    #     # *IMP call super class' save method to make sure other operations work as expected
+    #     super().save(*args, **kwargs)
+    # ? Save is not required anymore because of prepopulated_fields in admin.py
 
     def __str__(self) -> str:
         return f"{self.title}, rating - {self.rating}"

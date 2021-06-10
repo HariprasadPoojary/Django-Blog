@@ -12,4 +12,9 @@
 	</li>
 	{% endfor %}
 </ul>
+<hr>
+<h4>
+	Total {{all_books_count}} books are available with average rating of
+	{{all_ratings_avg.rating__avg|floatformat}}
+</h4>
 {% endblock body_content %}

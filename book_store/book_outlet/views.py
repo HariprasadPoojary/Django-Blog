@@ -1,15 +1,20 @@
 from django.http.response import Http404
 from django.shortcuts import get_object_or_404, render, redirect
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Avg
 
 # Create your views here.
 from .models import Book
 
 
 def index(request):
-    all_books = Book.objects.all()
+    all_books = Book.objects.all().order_by("-rating")  # "-" to order in descending
+    all_books_count = all_books.count()
+    all_ratings_avg = all_books.aggregate(Avg("rating"))
     context = {
         "all_books": all_books,
+        "all_books_count": all_books_count,
+        "all_ratings_avg": all_ratings_avg,
     }
     return render(request, "book_outlet/index.html", context)
 

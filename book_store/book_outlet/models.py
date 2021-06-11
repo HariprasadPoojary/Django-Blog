@@ -1,8 +1,19 @@
 from django.db import models
+from django.db.models.deletion import CASCADE
 from django.urls import reverse
 from django.utils.text import slugify
 
 # Create your models here.
+
+
+class Author(models.Model):
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+
+    def __str__(self) -> str:
+        return f"{self.first_name} {self.last_name}"
+
+
 class Book(models.Model):
     BOOK_RATING = [
         (None, "(Unknown)"),
@@ -14,7 +25,7 @@ class Book(models.Model):
     ]
     title = models.CharField(max_length=100)
     pages = models.IntegerField(null=True)
-    author = models.CharField(max_length=50, null=True)
+    author = models.ForeignKey(Author, on_delete=models.CASCADE, null=True)
     rating = models.IntegerField(choices=BOOK_RATING)
     is_bestselling = models.BooleanField(default=False)
     slug = models.SlugField(
@@ -101,3 +112,15 @@ class Book(models.Model):
 # * >>> james_brown_page = james_brown.filter(pages__gt=280)
 # * >>> james_brown_page.filter(author="E. L. James")
 # <QuerySet [<Book: 50 Shades Darker, rating - 5>]>
+
+# ! Adding data with Foreign Key
+# * >>> mp = Author.objects.get(first_name="Mario")
+# * >>> mp.last_name
+# 'Puzo'
+# * >>> tgf = Book(title="The Godfather", rating=5, pages=700, is_bestselling=False, author=mp)
+# * >>> tgf.title
+# 'The Godfather'
+# * >>> tgf.author
+# <Author: Mario Puzo>
+# * >>> tgf.author.first_name
+# 'Mario'

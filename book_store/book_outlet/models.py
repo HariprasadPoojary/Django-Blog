@@ -10,8 +10,11 @@ class Author(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
 
-    def __str__(self) -> str:
+    def full_name(self) -> str:
         return f"{self.first_name} {self.last_name}"
+
+    def __str__(self) -> str:
+        return self.full_name()
 
 
 class Book(models.Model):
@@ -25,7 +28,9 @@ class Book(models.Model):
     ]
     title = models.CharField(max_length=100)
     pages = models.IntegerField(null=True)
-    author = models.ForeignKey(Author, on_delete=models.CASCADE, null=True)
+    author = models.ForeignKey(
+        Author, on_delete=models.CASCADE, null=True, related_name="books"
+    )
     rating = models.IntegerField(choices=BOOK_RATING)
     is_bestselling = models.BooleanField(default=False)
     slug = models.SlugField(
@@ -114,6 +119,7 @@ class Book(models.Model):
 # <QuerySet [<Book: 50 Shades Darker, rating - 5>]>
 
 # ! Adding data with Foreign Key
+# ? >>> from book_outlet.models import Book, Author
 # * >>> mp = Author.objects.get(first_name="Mario")
 # * >>> mp.last_name
 # 'Puzo'
@@ -124,3 +130,20 @@ class Book(models.Model):
 # <Author: Mario Puzo>
 # * >>> tgf.author.first_name
 # 'Mario'
+
+# ! Cross Model Quering (Foreign Key)
+# * >>> Book.objects.filter(author__last_name = "James")
+# <QuerySet [<Book: Fifty Shades of Grey, rating - 5>, <Book: Fifty Shades Darker, rating - 4>, <Book: Fifty Shades Creed, rating - 5>]>
+# * >>> Book.objects.filter(author__last_name__contains = "ames")
+# <QuerySet [<Book: Fifty Shades of Grey, rating - 5>, <Book: Fifty Shades Darker, rating - 4>, <Book: Fifty Shades Creed, rating - 5>]>
+# ? Reverse Many to one relationship
+# * >>> ej = Author.objects.get(last_name="James")
+# * >>> ej.book_set
+# <django.db.models.fields.related_descriptors.create_reverse_many_to_one_manager.<locals>.RelatedManager object at 0x00000265AE543D00>
+# * >>> ej.book_set.all()
+# <QuerySet [<Book: Fifty Shades of Grey, rating - 5>, <Book: Fifty Shades Darker, rating - 4>, <Book: Fifty Shades Creed, rating - 5>]>
+# ? Add related_name="books" to author(ForeignKey) field in Book Model
+# * >>> ej.books.all()
+# <QuerySet [<Book: Fifty Shades of Grey, rating - 5>, <Book: Fifty Shades Darker, rating - 4>, <Book: Fifty Shades Creed, rating - 5>]>
+# * >>> ej.books.filter(rating__gt = 4)
+# <QuerySet [<Book: Fifty Shades of Grey, rating - 5>, <Book: Fifty Shades Creed, rating - 5>]>

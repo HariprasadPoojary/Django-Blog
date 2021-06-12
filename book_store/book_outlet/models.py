@@ -1,14 +1,29 @@
 from django.db import models
 from django.db.models.deletion import CASCADE
+from django.db.models.fields.related import OneToOneField
 from django.urls import reverse
 from django.utils.text import slugify
+from django.core.validators import MaxValueValidator
 
 # Create your models here.
+
+
+class Address(models.Model):
+    street = models.CharField(max_length=100)
+    pincode = models.IntegerField(validators=[MaxValueValidator(999999)])
+    city = models.CharField(max_length=60)
+
+    class Meta:
+        verbose_name_plural = "Address Entries"
+
+    def __str__(self) -> str:
+        return f"{self.street}, {self.city}"
 
 
 class Author(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
+    address = models.OneToOneField(Address, on_delete=models.CASCADE, null=True)
 
     def full_name(self) -> str:
         return f"{self.first_name} {self.last_name}"
@@ -118,7 +133,7 @@ class Book(models.Model):
 # * >>> james_brown_page.filter(author="E. L. James")
 # <QuerySet [<Book: 50 Shades Darker, rating - 5>]>
 
-# ! Adding data with Foreign Key
+# ! Adding data with Foreign Key -> Many-to-One Relationship
 # ? >>> from book_outlet.models import Book, Author
 # * >>> mp = Author.objects.get(first_name="Mario")
 # * >>> mp.last_name
@@ -147,3 +162,17 @@ class Book(models.Model):
 # <QuerySet [<Book: Fifty Shades of Grey, rating - 5>, <Book: Fifty Shades Darker, rating - 4>, <Book: Fifty Shades Creed, rating - 5>]>
 # * >>> ej.books.filter(rating__gt = 4)
 # <QuerySet [<Book: Fifty Shades of Grey, rating - 5>, <Book: Fifty Shades Creed, rating - 5>]>
+
+# ! One-to-One Relatioship
+# * >>> addr = Address.objects.get(city="Mangalore")
+# * >>> addr.street
+# 'Sampige'
+# * >>> ej = Author.objects.get(last_name="James")
+# * >>> ej.address
+# <Address: Mangalore>
+# * >>> addr.author
+# <Author: E. L. James>
+# * >>> addr.author.first_name
+# 'E. L.'
+# * >>> addr.author.last_name
+# 'James'

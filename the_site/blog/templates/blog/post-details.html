@@ -11,7 +11,7 @@
 	<h2>{{the_post.title}}</h2>
 	<article>
 		<img
-			src=" {% static 'blog/images/'|add:the_post.image %} "
+			src=" {% static 'blog/images/'|add:the_post.image_name %} "
 			alt="{{the_post.title}}"
 		/>
 		<address>By {{the_post.author}}</address>

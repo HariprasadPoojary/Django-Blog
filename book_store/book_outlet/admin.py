@@ -12,9 +12,9 @@ class BookAdmin(admin.ModelAdmin):
         "rating",
     )
     list_display = (
-        "title",
         "author",
         "rating",
+        "title",
     )
 
 

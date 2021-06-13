@@ -1,5 +1,4 @@
 from django.db import models
-from django.db.models.deletion import CASCADE
 from django.db.models.fields.related import OneToOneField
 from django.urls import reverse
 from django.utils.text import slugify
@@ -8,16 +7,27 @@ from django.core.validators import MaxValueValidator
 # Create your models here.
 
 
+class Country(models.Model):
+    name = models.CharField(max_length=100)
+    code = models.CharField(max_length=3)
+
+    def __str__(self) -> str:
+        return f"{self.name}"
+
+    class Meta:
+        verbose_name_plural = "Countries"
+
+
 class Address(models.Model):
     street = models.CharField(max_length=100)
     pincode = models.IntegerField(validators=[MaxValueValidator(999999)])
     city = models.CharField(max_length=60)
 
-    class Meta:
-        verbose_name_plural = "Address Entries"
-
     def __str__(self) -> str:
         return f"{self.street}, {self.city}"
+
+    class Meta:
+        verbose_name_plural = "Address Entries"
 
 
 class Author(models.Model):
@@ -51,6 +61,7 @@ class Book(models.Model):
     slug = models.SlugField(
         default="", null=False, db_index=True
     )  # db_index is used to increase the performance by storing the data more efficiently
+    published_country = models.ManyToManyField(Country, related_name="books")
 
     # define a function to return url from model itself
     def get_absolute_url(self):
@@ -77,10 +88,10 @@ class Book(models.Model):
 # ! Queries practiced using Django shell
 
 # ? >>> from book_outlet.models import Book
-# >>> django = Book(title="Django Unchained", rating=4)
-# >>> django.save()
-# >>> mehula = Book(title="Immortals of Mehula", rating=4)
-# >>> mehula.save()
+# * >>> django = Book(title="Django Unchained", rating=4)
+# * >>> django.save()
+# * >>> mehula = Book(title="Immortals of Mehula", rating=4)
+# * >>> mehula.save()
 # * >>> Book.objects.all()
 # <QuerySet [<Book: Book object (1)>, <Book: Book object (2)>]>
 # * >>> Book.objects.all()
@@ -99,7 +110,7 @@ class Book(models.Model):
 # <Book: Angels & Demons, rating - 4>
 
 # ! get must return only 1 object else MultipleObjectsReturned Exception
-# Book.objects.get(id=2)
+# * >>> Book.objects.get(id=2)
 # <Book: Immortals of Mehula, rating - 4>
 
 # ! Use of filter to get multiple objects in return
@@ -157,7 +168,8 @@ class Book(models.Model):
 # <django.db.models.fields.related_descriptors.create_reverse_many_to_one_manager.<locals>.RelatedManager object at 0x00000265AE543D00>
 # * >>> ej.book_set.all()
 # <QuerySet [<Book: Fifty Shades of Grey, rating - 5>, <Book: Fifty Shades Darker, rating - 4>, <Book: Fifty Shades Creed, rating - 5>]>
-# ? Add related_name="books" to author(ForeignKey) field in Book Model
+# ? Add related_name="books" to author(ForeignKey) field in Book Model,
+# ? *** ej.book_set.all() wont work anymore ***
 # * >>> ej.books.all()
 # <QuerySet [<Book: Fifty Shades of Grey, rating - 5>, <Book: Fifty Shades Darker, rating - 4>, <Book: Fifty Shades Creed, rating - 5>]>
 # * >>> ej.books.filter(rating__gt = 4)
@@ -176,3 +188,24 @@ class Book(models.Model):
 # 'E. L.'
 # * >>> addr.author.last_name
 # 'James'
+
+# ! Many-to-Many Relatioship
+# * >>> ind = Country.objects.get(name="India")
+# * >>> ind.code
+# 'IN'
+# * >>> fg = Book.objects.get(title="Forrest Gump")
+# * >>> fg.published_country
+# <django.db.models.fields.related_descriptors.create_forward_many_to_many_manager.<locals>.ManyRelatedManager object at 0x000002411E815940>
+# * >>> fg.published_country = ind
+# ? TypeError: Direct assignment to the forward side of a many-to-many set is prohibited. Use published_country.set() instead.
+# * >>> fg.published_country.add(ind)
+# * >>> fg.published_country
+# <django.db.models.fields.related_descriptors.create_forward_many_to_many_manager.<locals>.ManyRelatedManager object at 0x000002411E84AF40>
+# * >>> fg.published_country.get(code="IN")
+# <Country: India>
+# * >>> fg.published_country.get(code="US")
+# ? book_outlet.models.Country.DoesNotExist: Country matching query does not exist.
+# ? Reverse link
+# * >>> ind.books.all()
+# ? books being the value -> related_name="books" of published_country in Book model
+# <QuerySet [<Book: Fifty Shades Creed, rating - 5>, <Book: Forrest Gump, rating - 4>]>

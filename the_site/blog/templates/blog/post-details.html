@@ -16,6 +16,12 @@
 		/>
 		<address>By {{the_post.author}}</address>
 		<div>Last updated on <time>{{the_post.date|date:"d M Y"}}</time></div>
+		<div class="tags">
+			<!-- prettier-ignore -->
+			{% for tag in tags %}
+			<a href="{{tag.get_absolute_url}}">{{tag.caption}}</a>
+			{% endfor %}
+		</div>
 	</article>
 </section>
 

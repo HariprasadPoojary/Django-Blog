@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.urls import reverse
+from django.core.validators import MinLengthValidator
 
 # Create your models here.
 
@@ -20,14 +21,17 @@ class Tag(models.Model):
     def __str__(self) -> str:
         return f"{self.caption}"
 
+    def get_absolute_url(self):
+        return reverse("posts_tags", args=[self.caption])
+
 
 class Post(models.Model):
     title = models.CharField(max_length=100)
     excerpt = models.CharField(max_length=300)
     image_name = models.CharField(max_length=100)
     date = models.DateTimeField(default=timezone.now)
-    slug = models.SlugField(db_index=True)
-    content = models.TextField()
+    slug = models.SlugField(db_index=True, unique=True)
+    content = models.TextField(validators=[MinLengthValidator(50)])
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
     tag = models.ManyToManyField(Tag)
 

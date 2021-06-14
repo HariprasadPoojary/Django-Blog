@@ -34,6 +34,15 @@ body {
 	color: white;
 }
 
+#summary article a {
+	position: relative;
+	color: white;
+	text-decoration: none;
+	border: 2px solid white;
+	border-radius: 4px;
+	padding: 0 2px 0 2px;
+}
+
 #summary article img {
 	width: 12rem;
 	height: 12rem;
@@ -49,6 +58,7 @@ body {
 
 #summary time {
 	font-weight: bold;
+	margin-bottom: 8px;
 }
 
 main {

@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from datetime import date
 
 # Create your views here.
@@ -8,7 +8,7 @@ from .models import Post, Tag
 
 
 def index(request):
-    recent_posts = Post.objects.order_by("date")[:3]
+    recent_posts = Post.objects.order_by("-date")[:3]  # "-" for descending
     context = {
         "recent_posts": recent_posts,
     }
@@ -16,7 +16,7 @@ def index(request):
 
 
 def posts(request):
-    all_posts = Post.objects.all()
+    all_posts = Post.objects.all().order_by("-date")
     context = {
         "posts": all_posts,
     }
@@ -24,7 +24,8 @@ def posts(request):
 
 
 def post_details(request, post_slug):
-    the_post = Post.objects.get(slug=post_slug)
+    # the_post = Post.objects.get(slug=post_slug)
+    the_post = get_object_or_404(Post, slug=post_slug)
     post_tags = the_post.tag.all()
     context = {
         "the_post": the_post,
@@ -36,7 +37,7 @@ def post_details(request, post_slug):
 
 def post_tags(request, caption):
     tag = Tag.objects.get(caption=caption)
-    all_posts = tag.post_set.all()
+    all_posts = tag.post_set.all().order_by("-date")
 
     context = {
         "posts": all_posts,

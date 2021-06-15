@@ -32,7 +32,12 @@ class Post(models.Model):
     date = models.DateTimeField(default=timezone.now)
     slug = models.SlugField(db_index=True, unique=True)
     content = models.TextField(validators=[MinLengthValidator(50)])
-    author = models.ForeignKey(Author, on_delete=models.CASCADE)
+    # Relations
+    author = models.ForeignKey(
+        Author,
+        null=True,
+        on_delete=models.SET_NULL,
+    )
     tag = models.ManyToManyField(Tag)
 
     def __str__(self) -> str:

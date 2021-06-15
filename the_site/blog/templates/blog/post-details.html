@@ -15,7 +15,7 @@
 			alt="{{the_post.title}}"
 		/>
 		<address>By {{the_post.author}}</address>
-		<div>Last updated on <time>{{the_post.date|date:"d M Y"}}</time></div>
+		<div>Last updated on <time>{{the_post.date|date:"d M Y P"}}</time></div>
 		<div class="tags">
 			<!-- prettier-ignore -->
 			{% for tag in tags %}

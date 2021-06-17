@@ -1,9 +1,16 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} {% load static %}
 <!-- prettier-ignore -->
 {% block title %}Review{% endblock title %}
+{% block css %}
+<link rel="stylesheet" href=" {% static 'reviews/style.css' %} " />
+{% endblock css %}
+<!-- prettier-ignore -->
 {% block body_content %}
-<form action="/" method="post">
+<form method="post">
 	{% csrf_token %}
+	<!-- prettier-ignore -->
+	{% comment %}
+	Basic Form
 	<label for="username">Name:</label>
 	<input type="text" name="username" id="username" />
 	<br />
@@ -12,6 +19,41 @@
 	<input type="password" name="password" id="password" />
 	<br />
 	<br />
-	<input type="submit" value="Submit" />
+	{% endcomment %}
+	<!-- prettier-ignore -->
+	{% comment %} Django Form {% endcomment %}
+	{% comment %} {{form}} {% endcomment %}
+
+	{% comment %} Django Form w\ user defined layout {% endcomment %}
+	{% comment %}
+	<div class="form-control {% if form.username.errors %} errors {% endif %}">
+		<!-- prettier-ignore -->
+		{{ form.username.label_tag }} 
+		{{ form.username }} 
+		{{ form.username.errors }}
+	</div>
+	<div class="form-control {% if form.username.errors %} errors {% endif %}">
+		<!-- prettier-ignore -->
+		{{ form.review_text.label_tag }} 
+		{{ form.review_text }}
+	</div>
+	<div class="form-control {% if form.username.errors %} errors {% endif %}">
+		<!-- prettier-ignore -->
+		{{ form.rating.label_tag }}
+		{{ form.rating }}
+	</div>
+	{% endcomment %}
+
+	<!-- prettier-ignore -->
+	{% for field in form %}
+	<div class="form-control {% if form.field.errors %} errors {% endif %}">
+		<!-- prettier-ignore -->
+		{{ field.label_tag }} 
+		{{ field }}
+		{{ field.errors }}
+	</div>
+	{% endfor %}
+
+	<button type="submit">Submit</button>
 </form>
 {% endblock body_content %}

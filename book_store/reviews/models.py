@@ -12,6 +12,7 @@ class Review(models.Model):
         (5, "⭐⭐⭐⭐⭐"),
     ]
     rating = models.IntegerField(choices=RATINGS)
+    # owner_comment = models.CharField(max_length=200)
 
     def __str__(self) -> str:
         return f"{self.username}, {self.rating}"

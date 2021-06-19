@@ -16,3 +16,6 @@ class Review(models.Model):
 
     def __str__(self) -> str:
         return f"{self.username}, {self.rating}"
+
+    def get_rating_star(self):
+        return "⭐" * self.rating

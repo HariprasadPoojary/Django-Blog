@@ -1,0 +1,14 @@
+{% extends 'base.html' %} {% load static %}
+
+<!-- prettier-ignore -->
+{% block title %}All Reviews{% endblock title %}
+
+<!-- prettier-ignore -->
+{% block body_content %}
+<ul>
+	<!-- prettier-ignore -->
+	{% for review in reviews %}
+	<li>{{ review.username }} ➡ Rating: {{ review.get_rating_star }}</li>
+	{% endfor %}
+</ul>
+{% endblock body_content %}

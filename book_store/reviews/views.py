@@ -1,10 +1,11 @@
+import reviews
 from django.shortcuts import redirect, render
 from django.views import View
+from django.views.generic.base import TemplateView
 
 # Create your views here.
 from .forms import ReviewForm
-
-# from .models import Review
+from .models import Review
 
 
 # def review(request):
@@ -43,9 +44,9 @@ from .forms import ReviewForm
 #     return render(request, "reviews/review.html", context)
 
 
-def thank_you(request):
-    context = {}
-    return render(request, "reviews/thankyou.html", context)
+# def thank_you(request):
+#     context = {}
+#     return render(request, "reviews/thankyou.html", context)
 
 
 # * Class Based views
@@ -70,3 +71,22 @@ class ReviewView(View):
                 "form": form,
             }
         return render(request, "reviews/review.html", context)
+
+
+class ThankYouView(TemplateView):
+    template_name = "reviews/thankyou.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["username"] = "Hari"
+        return context
+
+
+class ReviewsView(TemplateView):
+    template_name = "reviews/reviews.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        reviews = Review.objects.all()
+        context["reviews"] = reviews
+        return context

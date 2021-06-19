@@ -9,6 +9,21 @@ class ReviewForm(forms.ModelForm):
         fields = "__all__"
         # exclude = ["owner_comment"]
 
+        labels = {
+            "username": "Your Name",
+            "review_text": "Your Review",
+        }
+        error_messages = {
+            "username": {
+                "required": "Your Name must not be empty",
+                "max_length": "Please enter a shorter name",
+            },
+            "review_text": {
+                "required": "Please enter some review",
+                "max_length": "Please enter a shorter review",
+            },
+        }
+
 
 # class ReviewForm(forms.Form):
 #     username = forms.CharField(

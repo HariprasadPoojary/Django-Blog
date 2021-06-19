@@ -2,7 +2,8 @@ from django.shortcuts import redirect, render
 
 # Create your views here.
 from .forms import ReviewForm
-from .models import Review
+
+# from .models import Review
 
 
 def review(request):
@@ -19,13 +20,16 @@ def review(request):
     if request.method == "POST":
         form = ReviewForm(request.POST)
         if form.is_valid():
-            print(form.cleaned_data)
-            rev = Review()
-            rev.username = form.cleaned_data["username"]
-            rev.review_text = form.cleaned_data["review_text"]
-            rev.rating = form.cleaned_data["rating"]
+            # * For the form with only Form class
+            # print(form.cleaned_data)
+            # rev = Review()
+            # rev.username = form.cleaned_data["username"]
+            # rev.review_text = form.cleaned_data["review_text"]
+            # rev.rating = form.cleaned_data["rating"]
+            # rev.save()
 
-            rev.save()
+            # * Form with ModelForm
+            form.save()
 
             return redirect("thank_you")
     else:

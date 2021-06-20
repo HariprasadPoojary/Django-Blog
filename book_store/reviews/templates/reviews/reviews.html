@@ -8,7 +8,11 @@
 <ul>
 	<!-- prettier-ignore -->
 	{% for review in reviews %}
-	<li>{{ review.username }} ➡ Rating: {{ review.get_rating_star }}</li>
+	<li>
+		<a href=" {% url 'review_detail' id=review.id %} "
+			>{{ review.username }} ➡ Rating: {{ review.get_rating_star }}</a
+		>
+	</li>
 	{% endfor %}
 </ul>
 {% endblock body_content %}

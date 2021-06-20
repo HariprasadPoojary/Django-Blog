@@ -1,0 +1,13 @@
+{% extends 'base.html' %} {% load static %}
+
+<!-- prettier-ignore -->
+{% block title %}Review Detail{% endblock title %}
+
+<!-- prettier-ignore -->
+{% block body_content %}
+<div class="review-detail">
+	<p>Username: {{ the_review.username }}</p>
+	<p>Rating: {{ the_review.get_rating_star }}</p>
+	<p>Review: {{ the_review.review_text }}</p>
+</div>
+{% endblock body_content %}

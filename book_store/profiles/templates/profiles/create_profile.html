@@ -1,0 +1,14 @@
+{% extends 'base.html' %} {% load static %}
+
+<!-- prettier-ignore -->
+{% block title %}Create Profile{% endblock title %}
+{% block css %}
+<link rel="stylesheet" href=" {% static 'profiles/style.css' %} " />
+{% endblock css %}
+<!-- prettier-ignore -->
+{% block body_content %}
+<form method="get">
+	<input type="file" name="" id="" />
+	<button type="submit">Submit!</button>
+</form>
+{% endblock body_content %}

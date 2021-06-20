@@ -9,7 +9,7 @@
 	<!-- prettier-ignore -->
 	{% for review in reviews %}
 	<li>
-		<a href=" {% url 'review_detail' id=review.id %} "
+		<a href=" {% url 'review_detail' pk=review.id %} "
 			>{{ review.username }} ➡ Rating: {{ review.get_rating_star }}</a
 		>
 	</li>

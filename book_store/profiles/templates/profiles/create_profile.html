@@ -7,8 +7,9 @@
 {% endblock css %}
 <!-- prettier-ignore -->
 {% block body_content %}
-<form method="get">
-	<input type="file" name="" id="" />
+<form action="/profile/" method="post" enctype="multipart/form-data">
+	{% csrf_token %}
+	<input type="file" name="image" id="" />
 	<button type="submit">Submit!</button>
 </form>
 {% endblock body_content %}

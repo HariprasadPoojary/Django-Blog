@@ -10,7 +10,7 @@
 <form action="" method="post" enctype="multipart/form-data">
 	{% csrf_token %}
 	<!-- <input type="file" name="image" id="" /> -->
-	{{ form }}
+	{{ form.as_p }}
 	<button type="submit">Submit!</button>
 </form>
 {% endblock body_content %}

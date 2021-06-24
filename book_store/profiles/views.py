@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic.edit import CreateView
+from django.views.generic import ListView
 
 # Create your views here.
 from . import file_ops
@@ -32,3 +33,9 @@ class UserProfileCreateView(CreateView):
 #         else:
 #             context = {"form": submitted_form}
 #             return render(request, "profiles/create_profile.html", context)
+
+
+class ProfileView(ListView):
+    model = UserProfile
+    template_name = "profiles/user_profiles.html"
+    context_object_name = "profiles"

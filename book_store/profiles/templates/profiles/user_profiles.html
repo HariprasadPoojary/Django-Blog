@@ -1,0 +1,14 @@
+{% extends 'base.html' %} {% load static %}
+
+<!-- prettier-ignore -->
+{% block title %}User Profiles{% endblock title %}
+{% block css %}
+<link rel="stylesheet" href=" {% static 'profiles/style.css' %} " />
+{% endblock css %}
+<!-- prettier-ignore -->
+{% block body_content %}
+{% for profile in profiles %}
+<ul>
+	<img src="{{ profile.user_image.url }}" alt="" srcset="" />
+</ul>
+{% endfor %} {% endblock body_content %}

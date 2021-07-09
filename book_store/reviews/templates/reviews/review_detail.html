@@ -9,5 +9,10 @@
 	<p>Username: {{ the_review.username }}</p>
 	<p>Rating: {{ the_review.get_rating_star }}</p>
 	<p>Review: {{ the_review.review_text }}</p>
+	<form action="/review/reviews/favorite/" method="post">
+		{% csrf_token %}
+		<input type="hidden" name="review_id" value="{{ the_review.id }} " />
+		<button>Favorite</button>
+	</form>
 </div>
 {% endblock body_content %}

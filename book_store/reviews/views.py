@@ -140,10 +140,25 @@ class ReviewDetailView(DetailView):
     model = Review
     context_object_name = "the_review"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # get the object of model review
+        loaded_review = self.object
+        # get the request object
+        request = self.request
+        # check if session review id = loaded review id & store bool
+        context["is_favorite"] = str(loaded_review.id) == request.session.get(
+            "favorite_review"
+        )
+        # print(str(loaded_review.id), request.session["favorite_review"])
+        # print(context["is_favorite"])
+        return context
+
 
 class AddFavoriteView(View):
     def post(self, request):
         review_id = request.POST["review_id"]
+        review_id = review_id.strip()
         request.session["favorite_review"] = review_id
 
         return redirect("review_detail", pk=review_id)

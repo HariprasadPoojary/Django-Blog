@@ -124,3 +124,9 @@ STATIC_URL = "/static/"
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
+
+# MEDIA
+MEDIA_ROOT = BASE_DIR / "uploads"
+MEDIA_URL = "/media/"  # to display in browser - path to media
+
+# SESSION_COOKIE_AGE = 120 # 2 mins, default is 2 weeks

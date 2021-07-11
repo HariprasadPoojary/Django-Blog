@@ -1,10 +1,7 @@
 from django.shortcuts import get_object_or_404, render
-from datetime import date
 
 # Create your views here.
 from .models import Post, Tag
-
-# dummy post detail content
 
 
 def index(request):
@@ -24,7 +21,7 @@ def posts(request):
 
 
 def post_details(request, post_slug):
-    # the_post = Post.objects.get(slug=post_slug)
+    # the_post = Post.objects.get(slug=post_slug)1
     the_post = get_object_or_404(Post, slug=post_slug)
     post_tags = the_post.tag.all()
     context = {

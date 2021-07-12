@@ -208,4 +208,5 @@ class Book(models.Model):
 # ? Reverse link
 # * >>> ind.books.all()
 # ? books being the value -> related_name="books" of published_country in Book model
+# ? else query would be ind.book_set.all()
 # <QuerySet [<Book: Fifty Shades Creed, rating - 5>, <Book: Forrest Gump, rating - 4>]>

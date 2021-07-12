@@ -1,4 +1,6 @@
 from django.shortcuts import get_object_or_404, render
+from django.views.generic.base import TemplateView
+from django.views.generic import ListView, DetailView
 
 # Create your views here.
 from .models import Post, Tag
@@ -40,3 +42,82 @@ def post_tags(request, caption):
         "posts": all_posts,
     }
     return render(request, "blog/all_posts.html", context)
+
+
+# ! Class Based Views
+
+
+# class IndexView(TemplateView):
+#     template_name = "blog/index.html"
+
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         recent_posts = Post.objects.order_by("-date")[:3]  # "-" for descending
+#         context["recent_posts"] = recent_posts
+
+#         return context
+
+
+class IndexView(ListView):
+    template_name = "blog/index.html"
+    model = Post
+    context_object_name = "recent_posts"
+
+    def get_queryset(self):
+        data_set = super().get_queryset()
+        data_set = data_set.order_by("-date")[:3]  # "-" for descending
+
+        return data_set
+
+
+# class PostsView(TemplateView):
+#     template_name = "blog/all_posts.html"
+
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         all_posts = Post.objects.all("-date")  # "-" for descending
+#         context["posts"] = all_posts
+
+#         return context
+
+
+class PostsView(ListView):
+    template_name = "blog/all_posts.html"
+    model = Post
+    context_object_name = "posts"
+
+    def get_queryset(self):
+        data_set = super().get_queryset()
+        data_set = data_set.order_by("-date")  # "-" for descending
+
+        return data_set
+
+
+class PostDetailsView(DetailView):
+    template_name = "blog/post-details.html"
+    model = Post
+    slug_field = "slug"  # Slug field name from Model
+    slug_url_kwarg = "post_slug"  # Slug variable name in urls.py
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        the_post = self.object
+        post_tags = the_post.tag.all()
+
+        context["the_post"] = the_post
+        context["tags"] = post_tags
+
+        return context
+
+
+class PostTagsView(ListView):
+    template_name = "blog/all_posts.html"
+    model = Tag
+    context_object_name = "posts"
+
+    def get_queryset(self, **kwargs):
+        tag_data_set = super().get_queryset()
+        tag_data_set = tag_data_set.get(caption=self.kwargs["caption"])
+        all_posts = tag_data_set.post_set.all().order_by("-date")
+
+        return all_posts

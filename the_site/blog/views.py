@@ -62,10 +62,11 @@ class IndexView(ListView):
     template_name = "blog/index.html"
     model = Post
     context_object_name = "recent_posts"
+    ordering = ["-date"]  # "-" for descending
 
     def get_queryset(self):
         data_set = super().get_queryset()
-        data_set = data_set.order_by("-date")[:3]  # "-" for descending
+        data_set = data_set[:3]  # limiting to 3 objects
 
         return data_set
 
@@ -85,26 +86,19 @@ class PostsView(ListView):
     template_name = "blog/all_posts.html"
     model = Post
     context_object_name = "posts"
-
-    def get_queryset(self):
-        data_set = super().get_queryset()
-        data_set = data_set.order_by("-date")  # "-" for descending
-
-        return data_set
+    ordering = ["-date"]  # "-" for descending
 
 
 class PostDetailsView(DetailView):
     template_name = "blog/post-details.html"
     model = Post
-    slug_field = "slug"  # Slug field name from Model
+    # slug_field = "slug"  # Slug field name from Model
     slug_url_kwarg = "post_slug"  # Slug variable name in urls.py
+    context_object_name = "the_post"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        the_post = self.object
-        post_tags = the_post.tag.all()
-
-        context["the_post"] = the_post
+        post_tags = self.object.tag.all()
         context["tags"] = post_tags
 
         return context

@@ -28,4 +28,23 @@
 <main>
 	<p>{{the_post.content|linebreaks}}</p>
 </main>
+<section id="comment-form">
+	<h2>Your Comment</h2>
+	<form action=" {% url "post_details" post_slug=the_post.slug %} " method="post">
+		<!-- prettier-ignore -->
+		{% csrf_token %} 
+		{% for form_field in comment_form %}
+		<div class="form-control">
+			<!-- prettier-ignore -->
+			{{ form_field.label_tag }}
+			{{ form_field }}
+			{{ form_field.errors }}
+		</div>
+		{% endfor %}
+		<div class="form-control">
+			<button type="submit">Save Comment</button>
+		</div>
+	</form>
+</section>
+
 {% endblock body_content %}

@@ -4,6 +4,7 @@ from django.views.generic import ListView, DetailView
 
 # Create your views here.
 from .models import Post, Tag
+from .forms import CommentForm
 
 
 def index(request):
@@ -100,6 +101,11 @@ class PostDetailsView(DetailView):
         context = super().get_context_data(**kwargs)
         post_tags = self.object.tag.all()
         context["tags"] = post_tags
+        # load form
+        comment_form = CommentForm()
+
+        # add to context
+        context["comment_form"] = comment_form
 
         return context
 

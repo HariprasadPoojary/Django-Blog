@@ -57,3 +57,6 @@ class Comment(models.Model):
         null=True,
         blank=True,
     )
+
+    def __str__(self) -> str:
+        return f"{self.user_name}, {self.user_email}"

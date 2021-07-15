@@ -1,6 +1,7 @@
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic.base import TemplateView
 from django.views.generic import ListView, DetailView
+from django.views.generic import View
 
 # Create your views here.
 from .models import Post, Tag
@@ -90,24 +91,84 @@ class PostsView(ListView):
     ordering = ["-date"]  # "-" for descending
 
 
-class PostDetailsView(DetailView):
-    template_name = "blog/post-details.html"
-    model = Post
-    # slug_field = "slug"  # Slug field name from Model
-    slug_url_kwarg = "post_slug"  # Slug variable name in urls.py
-    context_object_name = "the_post"
+# class PostDetailsView(DetailView):
+#     template_name = "blog/post-details.html"
+#     model = Post
+#     # slug_field = "slug"  # Slug field name from Model
+#     slug_url_kwarg = "post_slug"  # Slug variable name in urls.py
+#     context_object_name = "the_post"
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        post_tags = self.object.tag.all()
-        context["tags"] = post_tags
-        # load form
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         post_tags = self.object.tag.all()
+#         context["tags"] = post_tags
+#         # load form
+#         comment_form = CommentForm()
+
+#         # add to context
+#         context["comment_form"] = comment_form
+
+#         return context
+
+
+class PostDetailsView(View):
+    """
+    return dictionary containing post model object and tags object(with all tags related to the post)
+    """
+
+    def get_post_tags(self, the_slug):
+        the_post = Post.objects.get(slug=the_slug)
+        post_tags = the_post.tag.all()
+
+        return {
+            "the_post": the_post,
+            "tags": post_tags,
+        }
+
+    def get(self, request, post_slug):
+        # get post & tags
+        post_n_tags = self.get_post_tags(post_slug)
+        the_post = post_n_tags["the_post"]
+        post_tags = post_n_tags["tags"]
+        # form
         comment_form = CommentForm()
 
-        # add to context
-        context["comment_form"] = comment_form
+        context = {
+            "the_post": the_post,
+            "tags": post_tags,
+            "comment_form": comment_form,
+        }
 
-        return context
+        return render(request, "blog/post-details.html", context)
+
+    def post(self, request, post_slug):
+        # get post
+        post_n_tags = self.get_post_tags(post_slug)
+        the_post = post_n_tags["the_post"]
+
+        # form
+        comment_form = CommentForm(request.POST)
+
+        if comment_form.is_valid():
+            # Don't save the form to database yet
+            comment = comment_form.save(commit=False)
+            # assign post object to comment model object
+            comment.post = the_post
+            # save the object to database
+            comment.save()
+
+            return redirect("post_details", post_slug=post_slug)
+        else:
+            # get tags
+            post_tags = post_n_tags["tags"]
+
+            context = {
+                "the_post": the_post,
+                "tags": post_tags,
+                "comment_form": comment_form,
+            }
+
+            return render(request, "blog/post-details.html", context)
 
 
 class PostTagsView(ListView):

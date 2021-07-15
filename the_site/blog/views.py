@@ -113,16 +113,19 @@ class PostsView(ListView):
 
 class PostDetailsView(View):
     """
-    return dictionary containing post model object and tags object(with all tags related to the post)
+    return dictionary containing post model object, tags object(with all tags related to the post) and comments related to posts
     """
 
     def get_post_tags(self, the_slug):
         the_post = Post.objects.get(slug=the_slug)
         post_tags = the_post.tag.all()
+        # query comments from post -> One to Many relation
+        post_comments = the_post.comment_set.all()
 
         return {
             "the_post": the_post,
             "tags": post_tags,
+            "comments": post_comments,
         }
 
     def get(self, request, post_slug):
@@ -130,6 +133,7 @@ class PostDetailsView(View):
         post_n_tags = self.get_post_tags(post_slug)
         the_post = post_n_tags["the_post"]
         post_tags = post_n_tags["tags"]
+        post_comments = post_n_tags["comments"]
         # form
         comment_form = CommentForm()
 
@@ -137,6 +141,7 @@ class PostDetailsView(View):
             "the_post": the_post,
             "tags": post_tags,
             "comment_form": comment_form,
+            "comments": post_comments,
         }
 
         return render(request, "blog/post-details.html", context)
@@ -161,11 +166,14 @@ class PostDetailsView(View):
         else:
             # get tags
             post_tags = post_n_tags["tags"]
+            # get comments
+            post_comments = post_n_tags["comments"]
 
             context = {
                 "the_post": the_post,
                 "tags": post_tags,
                 "comment_form": comment_form,
+                "comments": post_comments,
             }
 
             return render(request, "blog/post-details.html", context)

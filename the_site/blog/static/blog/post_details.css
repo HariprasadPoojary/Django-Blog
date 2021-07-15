@@ -130,8 +130,7 @@ main {
 }
 
 .form-control input,
-.form-control textarea,
-.form-control button {
+.form-control textarea {
 	display: block;
 	width: 100%;
 	font: inherit;

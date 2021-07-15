@@ -13,3 +13,5 @@ Blog web application build with with Python and the Django framework using fulls
 -   Advanced features like class-based views (and when to use them)
 -   Dealing with file uploads and how to serve uploaded files
 -   Working with sessions
+
+> This project is inspired by Maximilian's [Udemy Course](https://www.udemy.com/course/python-django-the-practical-guide/ "Python Django - The Practical Guide")

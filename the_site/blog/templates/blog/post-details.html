@@ -8,11 +8,13 @@
 <!-- prettier-ignore -->
 {% block body_content %}
 
+{% if comment_form.errors %}
 <div id="alert">
 	<h2>Cannot save this comment 😥</h2>
 	<p>Please fix the issues in the comment box below</p>
-	<a href="#comment-form">Fix ✔</a>
+	<a href="#comment-form">Fix Now ✔</a>
 </div>
+{% endif %}
 
 <section id="summary">
 	<h2>{{the_post.title}}</h2>
@@ -36,13 +38,30 @@
 	<p>{{the_post.content|linebreaks}}</p>
 </main>
 
+<section id="comments">
+	<ul>
+		<!-- prettier-ignore -->
+		{% for comment in comments %}
+		<li>
+			<h2>{{ comment.user_name }}</h2>
+			<p>{{ comment.comment_text|linebreaks }}</p>
+		</li>
+		{% endfor %}
+	</ul>
+</section>
+
 <section id="comment-form">
 	<h2>Your Comment</h2>
-	<form action=" {% url "post_details" post_slug=the_post.slug %} " method="post">
+	<form
+		action=" {% url 'post_details' post_slug=the_post.slug %} "
+		method="post"
+	>
 		<!-- prettier-ignore -->
 		{% csrf_token %} 
 		{% for form_field in comment_form %}
-		<div class="form-control {% if form_field.errors %} invalid {% endif %} ">
+		<div
+			class="form-control {% if form_field.errors %} invalid {% endif %}"
+		>
 			<!-- prettier-ignore -->
 			{{ form_field.label_tag }}
 			{{ form_field }}

@@ -120,7 +120,7 @@ class PostDetailsView(View):
         the_post = Post.objects.get(slug=the_slug)
         post_tags = the_post.tag.all()
         # query comments from post -> One to Many relation
-        post_comments = the_post.comment_set.all()
+        post_comments = the_post.comment_set.all().order_by("-time")
 
         return {
             "the_post": the_post,

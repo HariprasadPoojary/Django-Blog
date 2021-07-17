@@ -193,6 +193,9 @@ main {
 #comments li {
 	margin-bottom: 1rem;
 	border-bottom: 2px solid #ccc;
+	display: flex;
+	gap: 2rem;
+	justify-content: space-between;
 }
 
 #comments li:last-of-type {
@@ -201,4 +204,10 @@ main {
 
 #comments h2 {
 	color: #464646;
+}
+
+/* timestamp */
+#comments .content-meta {
+	font-family: monospace;
+	font-size: 1rem;
 }

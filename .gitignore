@@ -4,6 +4,5 @@ static/css/main.css.map
 pass.txt
 node_modules
 .env
-db.sqlite3
 ---------------
 challenge_app/

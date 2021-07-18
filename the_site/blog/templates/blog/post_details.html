@@ -1,6 +1,9 @@
 {% extends 'base.html' %} {% load static %}
 <!-- prettier-ignore -->
-{% block title %}{{the_post.title}}{% endblock title %}
+{% block title %}
+{{the_post.title}}
+{% endblock title %}
+
 {% block css %}
 <link rel="stylesheet" href=" {% static 'blog/post_details.css' %} " />
 {% endblock css %}
@@ -18,12 +21,41 @@
 
 <section id="summary">
 	<h2>{{the_post.title}}</h2>
-	<div class="tags">
+	<div>
 		<!-- prettier-ignore -->
 		{% for tag in tags %}
-		<a href="{{tag.get_absolute_url}}">{{tag.caption}}</a>
+		<a class="tag" href="{{tag.get_absolute_url}}">{{tag.caption}}</a>
 		{% endfor %}
+		<!-- prettier-ignore -->
+		{% if not read_later %}
+		<div class="read-later">
+			<form action="{% url 'get_read_later' %}" method="post">
+				<!-- prettier-ignore -->
+				{% csrf_token %}
+				<input
+					type="hidden"
+					name="post_slug"
+					value="{{ the_post.slug }}"
+				/>
+				<button type="submit">Read Later 🕓</button>
+			</form>
+		</div>
+		{% else %}
+		<div class="read-later">
+			<form action="{% url 'get_read_later' %}" method="post">
+				<!-- prettier-ignore -->
+				{% csrf_token %}
+				<input
+					type="hidden"
+					name="post_slug"
+					value="{{ the_post.slug }}"
+				/>
+				<button type="submit">Done Reading ✔</button>
+			</form>
+		</div>
+		{% endif %}
 	</div>
+
 	<article>
 		<img src=" {{ the_post.post_image.url }} " alt="{{the_post.title}}" />
 		<address>

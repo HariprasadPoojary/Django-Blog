@@ -7,43 +7,44 @@ from django.views.generic import View
 from .models import Post, Tag
 from .forms import CommentForm
 
+# ! Function Based Views
 
-def index(request):
-    recent_posts = Post.objects.order_by("-date")[:3]  # "-" for descending
-    context = {
-        "recent_posts": recent_posts,
-    }
-    return render(request, "blog/index.html", context)
-
-
-def posts(request):
-    all_posts = Post.objects.all().order_by("-date")
-    context = {
-        "posts": all_posts,
-    }
-    return render(request, "blog/all_posts.html", context)
+# def index(request):
+#     recent_posts = Post.objects.order_by("-date")[:3]  # "-" for descending
+#     context = {
+#         "recent_posts": recent_posts,
+#     }
+#     return render(request, "blog/index.html", context)
 
 
-def post_details(request, post_slug):
-    # the_post = Post.objects.get(slug=post_slug)1
-    the_post = get_object_or_404(Post, slug=post_slug)
-    post_tags = the_post.tag.all()
-    context = {
-        "the_post": the_post,
-        "tags": post_tags,
-    }
-
-    return render(request, "blog/post-details.html", context)
+# def posts(request):
+#     all_posts = Post.objects.all().order_by("-date")
+#     context = {
+#         "posts": all_posts,
+#     }
+#     return render(request, "blog/all_posts.html", context)
 
 
-def post_tags(request, caption):
-    tag = Tag.objects.get(caption=caption)
-    all_posts = tag.post_set.all().order_by("-date")
+# def post_details(request, post_slug):
+#     # the_post = Post.objects.get(slug=post_slug)1
+#     the_post = get_object_or_404(Post, slug=post_slug)
+#     post_tags = the_post.tag.all()
+#     context = {
+#         "the_post": the_post,
+#         "tags": post_tags,
+#     }
 
-    context = {
-        "posts": all_posts,
-    }
-    return render(request, "blog/all_posts.html", context)
+#     return render(request, "blog/post-details.html", context)
+
+
+# def post_tags(request, caption):
+#     tag = Tag.objects.get(caption=caption)
+#     all_posts = tag.post_set.all().order_by("-date")
+
+#     context = {
+#         "posts": all_posts,
+#     }
+#     return render(request, "blog/all_posts.html", context)
 
 
 # ! Class Based Views
@@ -134,6 +135,8 @@ class PostDetailsView(View):
         the_post = post_n_tags["the_post"]
         post_tags = post_n_tags["tags"]
         post_comments = post_n_tags["comments"]
+        read_later = True if post_slug in request.session.get("read_later_posts") else False
+        print(read_later)
         # form
         comment_form = CommentForm()
 
@@ -142,9 +145,10 @@ class PostDetailsView(View):
             "tags": post_tags,
             "comment_form": comment_form,
             "comments": post_comments,
+            "read_later": read_later,
         }
 
-        return render(request, "blog/post-details.html", context)
+        return render(request, "blog/post_details.html", context)
 
     def post(self, request, post_slug):
         # get post
@@ -190,3 +194,39 @@ class PostTagsView(ListView):
         all_posts = tag_data_set.post_set.all().order_by("-date")
 
         return all_posts
+
+
+class StoreReadLaterView(View):
+    def post(self, request):
+        post_later_slug = request.POST["post_slug"]
+        print(post_later_slug)
+        if request.session.get("read_later_posts") is not None:
+            # key read_later_posts is available, append post
+            post_later_slug_list = request.session["read_later_posts"]
+            post_later_slug_list.append(post_later_slug)
+            request.session["read_later_posts"] = post_later_slug_list
+            print(request.session["read_later_posts"])
+        else:
+            # key read_later_posts is not yet available, create a list with value
+            request.session["read_later_posts"] = [post_later_slug]
+
+        return redirect("post_details", post_slug=post_later_slug)
+
+
+class ReadLaterView(ListView):
+    template_name = "blog/all_posts.html"
+    model = Post
+    context_object_name = "posts"
+
+    def get_queryset(self, **kwargs):
+        posts_data_set = super().get_queryset()
+        posts_list = self.request.session.get("read_later_posts")
+        print(posts_list)
+        posts_data_set = self.model.objects.filter(slug__in=posts_list)
+
+        return posts_data_set
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["read_later"] = True
+        return context

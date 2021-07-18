@@ -1,6 +1,12 @@
 {% extends 'base.html' %} {% load static %}
 <!-- prettier-ignore -->
-{% block title %}Posts{% endblock title %}
+{% block title %}
+	{% if read_later %}
+		Posts Yet To Read
+	{% else %}
+		All Posts
+	{% endif %}
+{% endblock title %}
 
 {% block css %}
 <link rel="stylesheet" href=" {% static 'blog/all_post.css' %} " />

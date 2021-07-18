@@ -16,7 +16,11 @@
 <!-- prettier-ignore -->
 {% block body_content %}
 <section id="all-posts">
+	{% if read_later %}
+	<h2>Posts Yet To Read</h2>
+	{% else %}
 	<h2>All Posts</h2>
+	{% endif %}
 	<ul>
 		<!-- prettier-ignore -->
 		{% for post in posts %}

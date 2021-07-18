@@ -230,7 +230,7 @@ class ReadLaterView(ListView):
 
     def get_queryset(self, **kwargs):
         posts_data_set = super().get_queryset()
-        posts_list = self.request.session.get("read_later_posts")
+        posts_list = self.request.session.get("read_later_posts", [])
         posts_data_set = self.model.objects.filter(slug__in=posts_list)
 
         return posts_data_set

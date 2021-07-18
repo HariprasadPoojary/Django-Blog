@@ -135,7 +135,9 @@ class PostDetailsView(View):
         the_post = post_n_tags["the_post"]
         post_tags = post_n_tags["tags"]
         post_comments = post_n_tags["comments"]
-        read_later = True if post_slug in request.session.get("read_later_posts") else False
+        read_later = (
+            True if post_slug in request.session.get("read_later_posts") else False
+        )
         print(read_later)
         # form
         comment_form = CommentForm()
@@ -199,16 +201,24 @@ class PostTagsView(ListView):
 class StoreReadLaterView(View):
     def post(self, request):
         post_later_slug = request.POST["post_slug"]
-        print(post_later_slug)
         if request.session.get("read_later_posts") is not None:
             # key read_later_posts is available, append post
             post_later_slug_list = request.session["read_later_posts"]
             post_later_slug_list.append(post_later_slug)
             request.session["read_later_posts"] = post_later_slug_list
-            print(request.session["read_later_posts"])
         else:
             # key read_later_posts is not yet available, create a list with value
             request.session["read_later_posts"] = [post_later_slug]
+
+        return redirect("post_details", post_slug=post_later_slug)
+
+
+class DoneReadLaterView(View):
+    def post(self, request):
+        post_later_slug = request.POST["post_slug"]
+        post_later_slug_list = request.session["read_later_posts"]
+        post_later_slug_list.remove(post_later_slug)
+        request.session["read_later_posts"] = post_later_slug_list
 
         return redirect("post_details", post_slug=post_later_slug)
 
@@ -221,7 +231,6 @@ class ReadLaterView(ListView):
     def get_queryset(self, **kwargs):
         posts_data_set = super().get_queryset()
         posts_list = self.request.session.get("read_later_posts")
-        print(posts_list)
         posts_data_set = self.model.objects.filter(slug__in=posts_list)
 
         return posts_data_set

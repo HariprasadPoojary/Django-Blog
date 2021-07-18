@@ -42,7 +42,7 @@
 		</div>
 		{% else %}
 		<div class="read-later">
-			<form action="{% url 'get_read_later' %}" method="post">
+			<form action="{% url 'done_read_later' %}" method="post">
 				<!-- prettier-ignore -->
 				{% csrf_token %}
 				<input

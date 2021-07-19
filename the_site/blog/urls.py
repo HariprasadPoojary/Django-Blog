@@ -9,10 +9,9 @@ urlpatterns = [
     ),
     path("posts/tags/<str:caption>/", views.PostTagsView.as_view(), name="posts_tags"),
     path(
-        "get-read-later/",
-        views.StoreReadLaterView.as_view(),
-        name="get_read_later",
+        "set-read-later/",
+        views.SetReadLaterView.as_view(),
+        name="set_read_later",
     ),
-    path("done-read-later/", views.DoneReadLaterView.as_view(), name="done_read_later"),
     path("read-later/", views.ReadLaterView.as_view(), name="read_later"),
 ]

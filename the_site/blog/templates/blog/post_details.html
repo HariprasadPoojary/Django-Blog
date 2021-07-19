@@ -27,9 +27,9 @@
 		<a class="tag" href="{{tag.get_absolute_url}}">{{tag.caption}}</a>
 		{% endfor %}
 		<!-- prettier-ignore -->
-		{% if not read_later %}
+
 		<div class="read-later">
-			<form action="{% url 'get_read_later' %}" method="post">
+			<form action="{% url 'set_read_later' %}" method="post">
 				<!-- prettier-ignore -->
 				{% csrf_token %}
 				<input
@@ -37,23 +37,15 @@
 					name="post_slug"
 					value="{{ the_post.slug }}"
 				/>
-				<button type="submit">Read Later 🕓</button>
+				<button type="submit">
+				{% if not read_later %}
+					Read Later 🕓
+				{% else %}
+					Done Reading ✔
+				{% endif %}
+				</button>
 			</form>
 		</div>
-		{% else %}
-		<div class="read-later">
-			<form action="{% url 'done_read_later' %}" method="post">
-				<!-- prettier-ignore -->
-				{% csrf_token %}
-				<input
-					type="hidden"
-					name="post_slug"
-					value="{{ the_post.slug }}"
-				/>
-				<button type="submit">Done Reading ✔</button>
-			</form>
-		</div>
-		{% endif %}
 	</div>
 
 	<article>

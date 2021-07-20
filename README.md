@@ -8,9 +8,9 @@ Blog web application build with with Python and the Django framework using fulls
 -   Working with data and models
 -   Connecting data with relationships (one-to-many, one-to-one, many-to-many)
 -   Querying data with Django's powerful model solution
--   Adding administration panels to your projects
--   Handling user input with forms - manually and with Django's built-in form support
--   Advanced features like class-based views (and when to use them)
+-   Adding administration panels
+-   Handling user input with forms using Django's built-in form support
+-   Advanced features like class-based views
 -   Dealing with file uploads and how to serve uploaded files
 -   Working with sessions
 

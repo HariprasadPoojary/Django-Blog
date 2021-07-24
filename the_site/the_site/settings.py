@@ -12,23 +12,23 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+#! Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# Quick-start development settings - unsuitable for production
+#! Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
+#! SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "%c+^pj0ua9bzg=z4857uio1x0(q@wx@y8qrtp=b#@(y_3w2qne"
 
-# SECURITY WARNING: don't run with debug turned on in production!
+#! SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
 
 
-# Application definition
+#! Application definition
 
 INSTALLED_APPS = [
     "blog",  # My app
@@ -73,7 +73,7 @@ TEMPLATES = [
 WSGI_APPLICATION = "the_site.wsgi.application"
 
 
-# Database
+#! Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
@@ -84,7 +84,7 @@ DATABASES = {
 }
 
 
-# Password validation
+#! Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -103,7 +103,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
+#! Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
 LANGUAGE_CODE = "en-us"
@@ -117,16 +117,19 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
+#! Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [
     BASE_DIR / "static",
-]
+]  # add folder other than default 'static' folder inside app
+STATIC_ROOT = BASE_DIR / "staticfiles"
+# Single folder from where all static files will be served
 
-# MEDIA
-MEDIA_ROOT = BASE_DIR / "uploads"
+
+#! MEDIA
+MEDIA_ROOT = BASE_DIR / "uploads"  # path where files are actually saved
 MEDIA_URL = "/media/"  # to display in browser - path to media
 
 # SESSION_COOKIE_AGE = 120 # 2 mins, default is 2 weeks
